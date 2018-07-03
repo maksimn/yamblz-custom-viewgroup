@@ -3,7 +3,7 @@ package ru.yandex.yamblz.developer_settings;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
-import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
+// import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
 
 public class DevMetricsProxyImpl implements DevMetricsProxy {
 
@@ -16,6 +16,7 @@ public class DevMetricsProxyImpl implements DevMetricsProxy {
 
   @Override
   public void apply() {
-    AndroidDevMetrics.initWith(application);
+
+    // AndroidDevMetrics.initWith(application);
   }
 }
