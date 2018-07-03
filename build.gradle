@@ -7,16 +7,17 @@ buildscript {
     apply from: 'dependencies.gradle'
 
     repositories {
+        google()
         jcenter()
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
         // See dependencies.gradle for declaration of plugins.
 
-        classpath gradlePlugins.android
+        classpath 'com.android.tools.build:gradle:3.1.0'
 
         // Compile-time annotation processing.
-        classpath gradlePlugins.apt
+        // classpath gradlePlugins.apt
 
         // Backport of some Java 8 language features such as Lambdas and method references.
         classpath gradlePlugins.retrolambda
@@ -31,7 +32,7 @@ buildscript {
         classpath gradlePlugins.androidDevMetrics
 
         // Catches common Java mistakes as compile-time errors.
-        classpath gradlePlugins.errorProne
+        // classpath gradlePlugins.errorProne
 
         // Method count plugin for android projects
         classpath gradlePlugins.dexcount
@@ -46,6 +47,7 @@ buildscript {
 
 allprojects {
     repositories {
+        google()
         jcenter()
     }
 
@@ -69,11 +71,11 @@ subprojects {
         }
     }
 
-    project.plugins.apply('net.ltgt.errorprone')
+    // project.plugins.apply('net.ltgt.errorprone')
 
-    configurations.errorprone {
-        resolutionStrategy.force "com.google.errorprone:error_prone_core:${versions.errorProneCoreVersion}"
-    }
+//    configurations.errorprone {
+//        resolutionStrategy.force "com.google.errorprone:error_prone_core:${versions.errorProneCoreVersion}"
+//    }
 
     afterEvaluate {
         tasks.findByName('pmd').dependsOn('assemble')

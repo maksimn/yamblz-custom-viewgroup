@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.neenbedankt.android-apt'
+// apply plugin: 'com.neenbedankt.android-apt'
 apply from: '../code_quality_tools/jacoco.gradle'
 apply plugin: 'com.frogermcs.androiddevmetrics'
 apply from: '../code_quality_tools/quality.gradle'
@@ -9,7 +9,6 @@ apply plugin: 'com.github.ben-manes.versions'
 android {
     // Declared in dependencies.gradle in the root of the project.
     compileSdkVersion versions.compileSdk
-    buildToolsVersion versions.buildTools
 
     defaultConfig {
         applicationId 'ru.yandex.yamblz'
@@ -80,12 +79,13 @@ android {
             exceptionFormat 'full'
         }
     }
+    buildToolsVersion '27.0.3'
 }
 
 // Libraries declared in dependencies.gradle in the root of the project
 dependencies {
     compile libraries.dagger
-    apt libraries.daggerCompiler
+    annotationProcessor libraries.daggerCompiler
 
     compile libraries.supportAnnotations
     compile libraries.supportAppCompat
@@ -94,7 +94,7 @@ dependencies {
     compile libraries.supportCardView
 
     compile libraries.butterKnife
-    apt libraries.butterKnifeCompiler
+    annotationProcessor libraries.butterKnifeCompiler
 
     compile libraries.timber
 
