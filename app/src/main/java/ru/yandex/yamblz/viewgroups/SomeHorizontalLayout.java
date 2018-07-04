@@ -1,8 +1,11 @@
 package ru.yandex.yamblz.viewgroups;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+
+import ru.yandex.yamblz.R;
 
 public class SomeHorizontalLayout extends ViewGroup {
     public SomeHorizontalLayout(Context context) {
@@ -23,8 +26,11 @@ public class SomeHorizontalLayout extends ViewGroup {
     }
 
     public static class LayoutParams extends MarginLayoutParams {
-        public LayoutParams(Context c, AttributeSet attrs) {
-            super(c, attrs);
+        public LayoutParams(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            TypedArray arr = context.obtainStyledAttributes(attrs,
+                    R.styleable.SomeHorizontalLayout);
+            arr.recycle();
         }
 
         public LayoutParams(int width, int height) {
