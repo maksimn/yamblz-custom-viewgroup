@@ -1,6 +1,7 @@
 package ru.yandex.yamblz.viewgroups;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,10 @@ import android.widget.RemoteViews;
 
 @RemoteViews.RemoteView
 public class SomeHorizontalLayout extends ViewGroup {
+
+    /** These are used for computing child frames based on their gravity. */
+    private final Rect mTmpChildRect = new Rect();
+
     public SomeHorizontalLayout(Context context) {
         super(context);
     }
@@ -43,16 +48,12 @@ public class SomeHorizontalLayout extends ViewGroup {
 
         if (child.getVisibility() != GONE) {
             // Measure the child.
-            measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
+            measureChild(child, widthMeasureSpec, heightMeasureSpec);
+            // Update our size information based on the layout params.
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
-            // Update our size information based on the layout params.  Children
-            // that asked to be positioned on the left or right go in those gutters.
-            final MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
-
-            maxWidth = Math.max(maxWidth,
-                    child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin);
-            maxHeight = Math.max(maxHeight,
-                    child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin);
+            maxWidth = Math.max(maxWidth, child.getMeasuredWidth());
+            maxHeight = Math.max(maxHeight, child.getMeasuredHeight());
             childState = combineMeasuredStates(childState, child.getMeasuredState());
         }
 
@@ -73,10 +74,19 @@ public class SomeHorizontalLayout extends ViewGroup {
      */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        // These are the far left and right edges in which we are performing layout.
+        int leftPos = getPaddingLeft();
+        int rightPos = right - left - getPaddingRight();
 
+        // These are the top and bottom edges in which we are performing layout.
+        final int parentTop = getPaddingTop();
+        final int parentBottom = bottom - top - getPaddingBottom();
+
+        final View child = getChildAt(0);
+
+        if (child.getVisibility() != GONE) {
+            // Place the child.
+            child.layout(leftPos, parentTop, rightPos, parentBottom);
+        }
     }
-
-    // ----------------------------------------------------------------------
-    // SomeHorizontalLayout do not need custom per-child layout parameters (this layout manager does
-    // fixed positioning of its children).
 }
