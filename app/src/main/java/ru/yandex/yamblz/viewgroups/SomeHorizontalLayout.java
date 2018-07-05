@@ -1,7 +1,6 @@
 package ru.yandex.yamblz.viewgroups;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +8,6 @@ import android.widget.RemoteViews;
 
 @RemoteViews.RemoteView
 public class SomeHorizontalLayout extends ViewGroup {
-
-    /** These are used for computing child frames based on their gravity. */
-    private final Rect mTmpChildRect = new Rect();
 
     public SomeHorizontalLayout(Context context) {
         super(context);
