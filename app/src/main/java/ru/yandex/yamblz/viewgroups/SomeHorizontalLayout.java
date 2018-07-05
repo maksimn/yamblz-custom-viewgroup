@@ -1,12 +1,11 @@
 package ru.yandex.yamblz.viewgroups;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.widget.RemoteViews;
 
-import ru.yandex.yamblz.R;
-
+@RemoteViews.RemoteView
 public class SomeHorizontalLayout extends ViewGroup {
     public SomeHorizontalLayout(Context context) {
         super(context);
@@ -20,25 +19,32 @@ public class SomeHorizontalLayout extends ViewGroup {
         super(context, attrs, defStyle);
     }
 
+    /**
+     * Any layout manager that doesn't scroll will want this.
+     */
     @Override
-    public void onLayout(boolean changed, int l, int t, int r, int b) {
+    public boolean shouldDelayChildPressedState() {
+        return false;
+    }
+
+    /**
+     * Ask all children to measure themselves and compute the measurement of this
+     * layout based on the children.
+     */
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
     }
 
-    public static class LayoutParams extends MarginLayoutParams {
-        public LayoutParams(Context context, AttributeSet attrs) {
-            super(context, attrs);
-            TypedArray arr = context.obtainStyledAttributes(attrs,
-                    R.styleable.SomeHorizontalLayout);
-            arr.recycle();
-        }
+    /**
+     * Position all children within this layout.
+     */
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 
-        public LayoutParams(int width, int height) {
-            super(width, height);
-        }
-
-        public LayoutParams(ViewGroup.LayoutParams source) {
-            super(source);
-        }
     }
+
+    // ----------------------------------------------------------------------
+    // SomeHorizontalLayout do not need custom per-child layout parameters (this layout manager does
+    // fixed positioning of its children).
 }
