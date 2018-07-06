@@ -58,10 +58,18 @@ public class SomeHorizontalLayout extends ViewGroup {
             height = Math.max(height, child1.getMeasuredHeight()); // max(38, 96)
         }
 
+        final View child2 = getChildAt(2);
+
+        if (child2.getVisibility() != GONE) {
+            measureChild(child2, parentWidthMeasureSpec, parentHeightMeasureSpec);
+            width += child2.getMeasuredWidth();
+            height = Math.max(height, child2.getMeasuredHeight());
+        }
+
         // Report our final dimensions.
         setMeasuredDimension(
-            resolveSizeAndState(width, parentWidthMeasureSpec, 0),
-            resolveSizeAndState(height, parentHeightMeasureSpec, 0)
+                resolveSizeAndState(width, parentWidthMeasureSpec, 0),
+                resolveSizeAndState(height, parentHeightMeasureSpec, 0)
         );
     }
 
@@ -74,13 +82,14 @@ public class SomeHorizontalLayout extends ViewGroup {
 
         final View child = getChildAt(0);
         final View child1 = getChildAt(1);
+        final View child2 = getChildAt(2);
 
         if (child.getVisibility() != GONE) {
             int lTop = 0;
             int lLeft = 0;
             int lRight = child.getMeasuredWidth();
             int lBottom = child.getMeasuredHeight();
-            currentWidth += lRight;
+            currentWidth = lRight;
 
             // Place the child.
             child.layout(lLeft, lTop, lRight, lBottom);
@@ -91,9 +100,21 @@ public class SomeHorizontalLayout extends ViewGroup {
             int lLeft = currentWidth;
             int lRight = currentWidth + child1.getMeasuredWidth();
             int lBottom = child1.getMeasuredHeight();
+            currentWidth = lRight;
 
             // Place the child.
             child1.layout(lLeft, lTop, lRight, lBottom);
+        }
+
+        if (child2.getVisibility() != GONE) {
+            int lTop = 0;
+            int lLeft = currentWidth;
+            int lRight = currentWidth + child2.getMeasuredWidth();
+            int lBottom = child2.getMeasuredHeight();
+            currentWidth = lRight;
+
+            // Place the child.
+            child2.layout(lLeft, lTop, lRight, lBottom);
         }
     }
 }
