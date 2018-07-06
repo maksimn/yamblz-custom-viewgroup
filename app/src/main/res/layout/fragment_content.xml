@@ -25,7 +25,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Some Button" />
+            android:text="SomeBtn" />
 
     </ru.yandex.yamblz.viewgroups.SomeHorizontalLayout>
 

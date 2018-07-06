@@ -35,6 +35,8 @@ public class SomeHorizontalLayout extends ViewGroup {
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int count = getChildCount();
+
         // Measurement will ultimately be computing these values.
         int height = 0;
         int width = 0;
@@ -42,28 +44,14 @@ public class SomeHorizontalLayout extends ViewGroup {
         int parentWidthMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         int parentHeightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
 
-        final View child = getChildAt(0);
+        for (int i = 0; i < count; i++) {
+            final View child = getChildAt(i);
 
-        if (child.getVisibility() != GONE) {
-            measureChild(child, parentWidthMeasureSpec, parentHeightMeasureSpec);
-            width = child.getMeasuredWidth(); // 96
-            height = child.getMeasuredHeight(); // 96
-        }
-
-        final View child1 = getChildAt(1);
-
-        if (child1.getVisibility() != GONE) {
-            measureChild(child1, parentWidthMeasureSpec, parentHeightMeasureSpec);
-            width += child1.getMeasuredWidth(); // 99
-            height = Math.max(height, child1.getMeasuredHeight()); // max(38, 96)
-        }
-
-        final View child2 = getChildAt(2);
-
-        if (child2.getVisibility() != GONE) {
-            measureChild(child2, parentWidthMeasureSpec, parentHeightMeasureSpec);
-            width += child2.getMeasuredWidth();
-            height = Math.max(height, child2.getMeasuredHeight());
+            if (child.getVisibility() != GONE) {
+                measureChild(child, parentWidthMeasureSpec, parentHeightMeasureSpec);
+                width += child.getMeasuredWidth();
+                height = Math.max(height, child.getMeasuredHeight());
+            }
         }
 
         // Report our final dimensions.
@@ -78,43 +66,21 @@ public class SomeHorizontalLayout extends ViewGroup {
      */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int currentWidth = 0;
+        int count = getChildCount();
 
-        final View child = getChildAt(0);
-        final View child1 = getChildAt(1);
-        final View child2 = getChildAt(2);
+        for (int i = 0, currentWidth = 0; i < count; i++) {
+            final View child = getChildAt(i);
 
-        if (child.getVisibility() != GONE) {
-            int lTop = 0;
-            int lLeft = 0;
-            int lRight = child.getMeasuredWidth();
-            int lBottom = child.getMeasuredHeight();
-            currentWidth = lRight;
+            if (child.getVisibility() != GONE) {
+                int lTop = 0;
+                int lLeft = currentWidth;
+                int lRight = currentWidth + child.getMeasuredWidth();
+                int lBottom = child.getMeasuredHeight();
+                currentWidth = lRight;
 
-            // Place the child.
-            child.layout(lLeft, lTop, lRight, lBottom);
-        }
-
-        if (child1.getVisibility() != GONE) {
-            int lTop = 0;
-            int lLeft = currentWidth;
-            int lRight = currentWidth + child1.getMeasuredWidth();
-            int lBottom = child1.getMeasuredHeight();
-            currentWidth = lRight;
-
-            // Place the child.
-            child1.layout(lLeft, lTop, lRight, lBottom);
-        }
-
-        if (child2.getVisibility() != GONE) {
-            int lTop = 0;
-            int lLeft = currentWidth;
-            int lRight = currentWidth + child2.getMeasuredWidth();
-            int lBottom = child2.getMeasuredHeight();
-            currentWidth = lRight;
-
-            // Place the child.
-            child2.layout(lLeft, lTop, lRight, lBottom);
+                // Place the child.
+                child.layout(lLeft, lTop, lRight, lBottom);
+            }
         }
     }
 }
