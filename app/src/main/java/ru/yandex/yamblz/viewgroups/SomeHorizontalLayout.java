@@ -35,29 +35,42 @@ public class SomeHorizontalLayout extends ViewGroup {
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int count = getChildCount();
+        final int layoutFullWidth = MeasureSpec.getSize(widthMeasureSpec);
+        final int count = getChildCount();
 
         // Measurement will ultimately be computing these values.
         int height = 0;
         int width = 0;
 
-        int parentWidthMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-        int parentHeightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        final int parentWidthMSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        final int parentHeightMSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+
+        View childWithMatchParent = null;
 
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
 
-            if (child.getVisibility() != GONE) {
-                measureChild(child, parentWidthMeasureSpec, parentHeightMeasureSpec);
+            if (child.getLayoutParams().width == LayoutParams.MATCH_PARENT) {
+                childWithMatchParent = child;
+            } else if (child.getVisibility() != GONE) {
+                measureChild(child, parentWidthMSpec, parentHeightMSpec);
                 width += child.getMeasuredWidth();
                 height = Math.max(height, child.getMeasuredHeight());
             }
         }
 
+        if (childWithMatchParent != null && childWithMatchParent.getVisibility() != GONE) {
+            final int measureSpec =
+                    MeasureSpec.makeMeasureSpec(layoutFullWidth - width, MeasureSpec.EXACTLY);
+
+            measureChild(childWithMatchParent, measureSpec, parentHeightMSpec);
+            height = Math.max(height, childWithMatchParent.getMeasuredHeight());
+        }
+
         // Report our final dimensions.
         setMeasuredDimension(
-                resolveSizeAndState(width, parentWidthMeasureSpec, 0),
-                resolveSizeAndState(height, parentHeightMeasureSpec, 0)
+            resolveSizeAndState(layoutFullWidth, parentWidthMSpec, 0),
+            resolveSizeAndState(height, parentHeightMSpec, 0)
         );
     }
 
