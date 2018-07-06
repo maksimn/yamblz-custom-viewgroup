@@ -36,32 +36,26 @@ public class SomeHorizontalLayout extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // Measurement will ultimately be computing these values.
-        int maxHeight = 0;
-        int maxWidth = 0;
+        int height = 0;
+        int width = 0;
         int childState = 0;
+
+        int parentWidthMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        int parentHeightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
 
         final View child = getChildAt(0);
 
         if (child.getVisibility() != GONE) {
-            // Measure the child.
-            measureChild(child, widthMeasureSpec, heightMeasureSpec);
-            // Update our size information based on the layout params.
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-
-            maxWidth = Math.max(maxWidth, child.getMeasuredWidth());
-            maxHeight = Math.max(maxHeight, child.getMeasuredHeight());
-            childState = combineMeasuredStates(childState, child.getMeasuredState());
+            measureChild(child, parentWidthMeasureSpec, parentHeightMeasureSpec);
+            width = child.getMeasuredWidth(); // 96
+            height = child.getMeasuredHeight(); // 96
+            childState = combineMeasuredStates(childState, child.getMeasuredState()); // 0
         }
-
-        // Check against our minimum height and width
-        maxHeight = Math.max(maxHeight, getSuggestedMinimumHeight());
-        maxWidth = Math.max(maxWidth, getSuggestedMinimumWidth());
 
         // Report our final dimensions.
         setMeasuredDimension(
-                resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
-                resolveSizeAndState(maxHeight, heightMeasureSpec,
-                        childState << MEASURED_HEIGHT_STATE_SHIFT)
+            resolveSizeAndState(width, parentWidthMeasureSpec, childState),
+            resolveSizeAndState(height, parentHeightMeasureSpec, childState)
         );
     }
 
@@ -70,19 +64,12 @@ public class SomeHorizontalLayout extends ViewGroup {
      */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        // These are the far left and right edges in which we are performing layout.
-        int leftPos = getPaddingLeft();
-        int rightPos = right - left - getPaddingRight();
-
-        // These are the top and bottom edges in which we are performing layout.
-        final int parentTop = getPaddingTop();
-        final int parentBottom = bottom - top - getPaddingBottom();
 
         final View child = getChildAt(0);
 
         if (child.getVisibility() != GONE) {
             // Place the child.
-            child.layout(leftPos, parentTop, rightPos, parentBottom);
+            child.layout(left, top, right, bottom);
         }
     }
 }
