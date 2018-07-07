@@ -54,6 +54,9 @@ public class SomeHorizontalLayout extends ViewGroup {
                 childWithMatchParent = child;
             } else if (child.getVisibility() != GONE) {
                 measureChild(child, parentWidthMSpec, parentHeightMSpec);
+
+                LayoutParams lp = (LayoutParams)child.getLayoutParams();
+
                 width += child.getMeasuredWidth();
                 height = Math.max(height, child.getMeasuredHeight());
             }
@@ -95,6 +98,28 @@ public class SomeHorizontalLayout extends ViewGroup {
                 child.layout(lLeft, lTop, lRight, lBottom);
             }
         }
+    }
+
+    // ----------------------------------------------------------------------
+    // The rest of the implementation is for custom per-child layout parameters.
+    @Override
+    public LayoutParams generateLayoutParams(AttributeSet attrs) {
+        return new SomeHorizontalLayout.LayoutParams(getContext(), attrs);
+    }
+
+    @Override
+    protected LayoutParams generateDefaultLayoutParams() {
+        return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    }
+
+    @Override
+    protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
+        return new LayoutParams(p);
+    }
+
+    @Override
+    protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
+        return p instanceof LayoutParams;
     }
 
     /**
