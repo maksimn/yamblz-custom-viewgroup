@@ -96,4 +96,22 @@ public class SomeHorizontalLayout extends ViewGroup {
             }
         }
     }
+
+    /**
+     * Custom per-child layout information.
+     */
+    public static class LayoutParams extends MarginLayoutParams {
+
+        public LayoutParams(Context c, AttributeSet attrs) {
+            super(c, attrs);
+        }
+
+        public LayoutParams(int width, int height) {
+            super(width, height);
+        }
+
+        public LayoutParams(ViewGroup.LayoutParams source) {
+            super(source);
+        }
+    }
 }
