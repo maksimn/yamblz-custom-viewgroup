@@ -84,15 +84,15 @@ public class SomeHorizontalLayout extends ViewGroup {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int count = getChildCount();
 
-        for (int i = 0, currentWidth = 0; i < count; i++) {
+        for (int i = 0, leftmostPos = 0; i < count; i++) {
             final View child = getChildAt(i);
 
             if (child.getVisibility() != GONE) {
-                int lTop = 0;
-                int lLeft = currentWidth;
-                int lRight = currentWidth + child.getMeasuredWidth();
-                int lBottom = child.getMeasuredHeight();
-                currentWidth = lRight;
+                final int lTop = top;
+                final int lLeft = leftmostPos;
+                final int lRight = leftmostPos + child.getMeasuredWidth();
+                final int lBottom = child.getMeasuredHeight();
+                leftmostPos = lRight;
 
                 // Place the child.
                 child.layout(lLeft, lTop, lRight, lBottom);
