@@ -53,21 +53,23 @@ public class SomeHorizontalLayout extends ViewGroup {
             if (child.getLayoutParams().width == LayoutParams.MATCH_PARENT) {
                 childWithMatchParent = child;
             } else if (child.getVisibility() != GONE) {
-                measureChild(child, parentWidthMSpec, parentHeightMSpec);
+                measureChildWithMargins(child, parentWidthMSpec, 0, parentHeightMSpec, 0);
 
-                LayoutParams lp = (LayoutParams)child.getLayoutParams();
-
-                width += child.getMeasuredWidth();
-                height = Math.max(height, child.getMeasuredHeight());
+                final LayoutParams lp = (LayoutParams)child.getLayoutParams();
+                width += child.getMeasuredWidth() + lp.rightMargin + lp.leftMargin;
+                height = Math.max(height,
+                                  child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin);
             }
         }
 
         if (childWithMatchParent != null && childWithMatchParent.getVisibility() != GONE) {
             final int measureSpec =
                     MeasureSpec.makeMeasureSpec(layoutFullWidth - width, MeasureSpec.EXACTLY);
+            final LayoutParams lp = (LayoutParams)childWithMatchParent.getLayoutParams();
 
-            measureChild(childWithMatchParent, measureSpec, parentHeightMSpec);
-            height = Math.max(height, childWithMatchParent.getMeasuredHeight());
+            measureChildWithMargins(childWithMatchParent, measureSpec, 0, parentHeightMSpec, 0);
+            height = Math.max(height,
+                    childWithMatchParent.getMeasuredHeight() + lp.topMargin + lp.bottomMargin);
         }
 
         // Report our final dimensions.
@@ -88,11 +90,12 @@ public class SomeHorizontalLayout extends ViewGroup {
             final View child = getChildAt(i);
 
             if (child.getVisibility() != GONE) {
-                final int lTop = top;
-                final int lLeft = leftmostPos;
-                final int lRight = leftmostPos + child.getMeasuredWidth();
-                final int lBottom = child.getMeasuredHeight();
-                leftmostPos = lRight;
+                final LayoutParams lp = (LayoutParams)child.getLayoutParams();
+                final int lTop = top + lp.topMargin;
+                final int lLeft = leftmostPos + lp.leftMargin;
+                final int lRight = lLeft + child.getMeasuredWidth();
+                final int lBottom = lTop + child.getMeasuredHeight();
+                leftmostPos = lRight + lp.rightMargin;
 
                 // Place the child.
                 child.layout(lLeft, lTop, lRight, lBottom);
