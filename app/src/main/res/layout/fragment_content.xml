@@ -11,21 +11,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:layout_marginLeft="8dp"
             android:src="@drawable/some_picture"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:text="AMX 40"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:layout_marginRight="36dp"
             android:text="Some Txt"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="42dp"
+            android:layout_marginLeft="6px"
             android:text="SomeBtn" />
 
     </ru.yandex.yamblz.viewgroups.SomeHorizontalLayout>
